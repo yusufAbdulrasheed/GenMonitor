@@ -65,6 +65,38 @@ docker compose up --build
 
 Set real `JWT_SECRET` / `REFRESH_SECRET` (env or a root `.env`) before any real use.
 
+## Deployment (Vercel + Render)
+
+The client and API are hosted on separate sites:
+
+- **Client → Vercel** (`https://gen-monitor.vercel.app`). Root Directory `client`.
+  `client/vercel.json` pins `VITE_API_URL=https://genmonitor2.onrender.com/api`
+  at build time and rewrites all routes to `index.html`, so no dashboard config
+  is required.
+- **API → Render** (`https://genmonitor2.onrender.com`). Root Directory `server`,
+  start command `node index.js`, health check `/health`. `render.yaml` is a
+  Blueprint for this service; set the secrets (`MONGO_URI`, `JWT_SECRET`,
+  `REFRESH_SECRET`) in the dashboard.
+
+Required API env vars in production:
+
+| Var | Value | Why |
+|---|---|---|
+| `NODE_ENV` | `production` | |
+| `CLIENT_URL` | `https://gen-monitor.vercel.app` | CORS + Socket.IO origin; comma-separate to add preview domains |
+| `MONGO_URI` / `JWT_SECRET` / `REFRESH_SECRET` | — | secrets |
+| `COOKIE_SAMESITE` | `none` *(auto-detected)* | client and API are on different sites, so auth cookies must be `SameSite=None; Secure` — `Secure` is then forced on |
+
+Because the client and API are cross-site, the browser only sends the auth
+cookies on `SameSite=None; Secure` cookies over HTTPS — `server/config/env.js`
+detects the cross-site `CLIENT_URL` and switches automatically; `COOKIE_SAMESITE`
+overrides it.
+
+A keep-alive job in `server/app.js` pings `/health` every 10 min
+(`KEEP_ALIVE_INTERVAL_MS`) so the free Render instance doesn't spin down. It uses
+`RENDER_EXTERNAL_URL` (injected by Render) and is a no-op elsewhere; disable with
+`ENABLE_KEEPALIVE=false`.
+
 ## Features
 
 | Area | What it does |

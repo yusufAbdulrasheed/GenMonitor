@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 const cookieOptions = {
   httpOnly: true,
   secure: config.cookieSecure,
-  sameSite: 'strict',
+  sameSite: config.cookieSameSite,
 };
 
 const setAuthCookies = (res, { accessToken, refreshToken }) => {
@@ -84,8 +84,10 @@ const logout = asyncHandler(async (req, res) => {
     }
   }
 
-  res.cookie('accessToken', 'none', { expires: new Date(Date.now() + 10 * 1000), httpOnly: true });
-  res.cookie('refreshToken', 'none', { expires: new Date(Date.now() + 10 * 1000), httpOnly: true });
+  // Clearing a cookie only works when the attributes match those it was set
+  // with, so reuse cookieOptions (secure / sameSite included).
+  res.clearCookie('accessToken', cookieOptions);
+  res.clearCookie('refreshToken', cookieOptions);
 
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 });

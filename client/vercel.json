@@ -5,6 +5,11 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "build": {
+    "env": {
+      "VITE_API_URL": "https://genmonitor2.onrender.com/api"
+    }
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],

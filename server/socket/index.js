@@ -14,7 +14,7 @@ const parseCookies = (header = '') =>
 
 const initSocket = (httpServer) => {
   const io = new Server(httpServer, {
-    cors: { origin: config.clientUrl, credentials: true },
+    cors: { origin: config.corsOrigins, credentials: true },
     path: '/socket.io',
   });
 

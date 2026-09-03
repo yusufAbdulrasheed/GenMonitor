@@ -12,7 +12,17 @@ const app = express();
 app.set('trust proxy', 1);
 
 // Middlewares
-app.use(cors({ origin: config.clientUrl, credentials: true }));
+// Reflect any allow-listed browser origin (see CLIENT_URL); allow non-browser
+// callers (health checks, curl, server-to-server) that send no Origin header.
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || config.corsOrigins.includes(origin)) return callback(null, true);
+      return callback(null, false);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '1mb' }));
 // Express 5 leaves req.body undefined when there is no JSON body; normalise it
 // so controllers can always read req.body.* safely.
@@ -28,6 +38,20 @@ app.use('/uploads', express.static(uploadRoot));
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', env: config.nodeEnv }));
+
+// Keep-alive: ping our own /health on an interval so a free Render web service
+// doesn't spin down after ~15 min of inactivity. No-op in tests / when the
+// self URL is unknown (see config.enableKeepAlive).
+if (config.enableKeepAlive) {
+  const pingUrl = `${config.keepAliveUrl}/health`;
+  const timer = setInterval(() => {
+    fetch(pingUrl)
+      .then((r) => console.log(`[keep-alive] ${pingUrl} -> ${r.status}`))
+      .catch((err) => console.warn(`[keep-alive] ${pingUrl} failed: ${err.message}`));
+  }, config.keepAliveIntervalMs);
+  if (typeof timer.unref === 'function') timer.unref();
+  console.log(`[keep-alive] pinging ${pingUrl} every ${config.keepAliveIntervalMs}ms`);
+}
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));

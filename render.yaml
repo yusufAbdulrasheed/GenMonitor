@@ -1,0 +1,36 @@
+# Render Blueprint for the API service.
+#   https://render.com/docs/blueprint-spec
+#
+# The client is deployed separately on Vercel (see client/vercel.json).
+# Adopt this by creating a new Blueprint instance from the repo, or just use it
+# as the source of truth for the env vars to set on the existing service.
+services:
+  - type: web
+    name: genmonitor2
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: node index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Browser origin of the SPA. Comma-separate to allow preview domains too.
+      - key: CLIENT_URL
+        value: https://gen-monitor.vercel.app
+      # Cross-site client (Vercel) + API (Render): auth cookies must be
+      # SameSite=None; Secure. env.js auto-detects this, but pin it to be safe.
+      - key: COOKIE_SAMESITE
+        value: none
+      # Keep the free instance from sleeping. RENDER_EXTERNAL_URL is injected by
+      # Render automatically, so no KEEP_ALIVE_URL is needed here.
+      - key: ENABLE_KEEPALIVE
+        value: "true"
+      # Secrets — set these in the Render dashboard (not stored in the repo).
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: REFRESH_SECRET
+        sync: false
