@@ -1,0 +1,57 @@
+# ── Dependencies ─────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Environment / secrets ────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ── Runtime data ────────────────────────────────────────────
+# uploaded work-order attachments — keep the folder, ignore its contents
+uploads/*
+!uploads/.gitkeep
+
+# ── Tests / coverage ────────────────────────────────────────
+coverage/
+.nyc_output/
+*.lcov
+# mongodb-memory-server binary cache, if it ever lands in-tree
+.cache/
+
+# ── Logs ────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Build output ───────────────────────────────────────────
+dist/
+build/
+
+# ── Local scratch / diagnostics ────────────────────────────
+_diag*.js
+_smoke*.js
+_scratch*.js
+tmp/
+temp/
+*.local
+
+# ── Editor / OS ────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.history/
+*.swp
+*.swo
+*.orig
+*.rej
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini

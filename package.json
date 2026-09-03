@@ -1,0 +1,18 @@
+{
+  "name": "generator-maintenance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generator fleet monitoring & maintenance management system",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n server,client -c green,cyan \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "test": "npm --prefix server test",
+    "lint": "npm --prefix client run lint",
+    "build": "npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

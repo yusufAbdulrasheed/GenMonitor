@@ -1,0 +1,2 @@
+# Keeps the uploads/ directory in version control.
+# Work-order attachments are written here at runtime and are git-ignored.

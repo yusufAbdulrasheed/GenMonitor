@@ -1,0 +1,70 @@
+# Root catch-all — each of client/ and server/ also has its own .gitignore.
+
+# ── Dependencies ─────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+*.tgz
+
+# ── Environment / secrets ────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ── Build / bundler output ──────────────────────────────────
+dist/
+dist-ssr/
+build/
+*.local
+
+# ── Tooling caches ──────────────────────────────────────────
+.vite/
+.eslintcache
+*.tsbuildinfo
+.cache/
+.mongodb-binaries/
+
+# ── Tests / coverage ────────────────────────────────────────
+coverage/
+.nyc_output/
+*.lcov
+
+# ── Runtime uploads (keep the folder) ──────────────────────
+server/uploads/*
+!server/uploads/.gitkeep
+
+# ── Local scratch / diagnostics ────────────────────────────
+_diag*.js
+_smoke*.js
+_scratch*.js
+tmp/
+temp/
+
+# ── Deploy ─────────────────────────────────────────────────
+.vercel
+
+# ── Logs ───────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Editor / OS ────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.history/
+*.swp
+*.swo
+*.orig
+*.rej
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/

@@ -1,0 +1,52 @@
+# ── Dependencies ─────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Environment ─────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Build output ───────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+*.local
+
+# ── Tooling caches ─────────────────────────────────────────
+.vite/
+.eslintcache
+*.tsbuildinfo
+
+# ── Deploy ─────────────────────────────────────────────────
+.vercel
+
+# ── Logs ───────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Test / coverage ────────────────────────────────────────
+coverage/
+
+# ── Editor / OS ────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.history/
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.orig
+*.rej
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

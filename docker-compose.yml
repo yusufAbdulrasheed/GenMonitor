@@ -1,0 +1,49 @@
+# Local full-stack stack: MongoDB + API + static client (nginx).
+#   docker compose up --build
+# Then open http://localhost:8080  (API on http://localhost:5000)
+#
+# Override the demo secrets by exporting JWT_SECRET / REFRESH_SECRET, or by
+# creating a .env file next to this one.
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  server:
+    build: ./server
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/generator-maintenance
+      CLIENT_URL: http://localhost:8080
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-jwt-secret-change-me}
+      REFRESH_SECRET: ${REFRESH_SECRET:-dev-insecure-refresh-secret-change-me}
+      COOKIE_SECURE: "false"
+      ENABLE_SIMULATION: "true"
+      ENABLE_SCHEDULER: "true"
+      ALLOW_SEED: "true"
+      EMAIL_ENABLED: "false"
+    ports:
+      - "5000:5000"
+
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_API_URL: /api
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:
