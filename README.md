@@ -107,32 +107,6 @@ Set real `JWT_SECRET` / `REFRESH_SECRET` (env or a root `.env`) before any real 
 | API keys | Admin | Admin |
 | Seed | — | Admin (and `ALLOW_SEED`) |
 
-## Environment variables (server)
-
-| Var | Default | Notes |
-|---|---|---|
-| `MONGO_URI` | — | **required** |
-| `JWT_SECRET` / `REFRESH_SECRET` | — | **required** — startup aborts if missing |
-| `PORT` | `5000` | |
-| `NODE_ENV` | `development` | |
-| `CLIENT_URL` | `http://localhost:5173` | CORS origin, socket CORS, email links |
-| `JWT_EXPIRES_IN` / `REFRESH_EXPIRES_IN` | `15m` / `7d` | |
-| `COOKIE_SECURE` | prod only | set `false` for a prod build over plain HTTP |
-| `SOCKET_ENABLED` | `true` | Socket.IO gateway |
-| `ENABLE_SIMULATION` / `SIMULATION_INTERVAL_MS` | on outside prod / `10000` | |
-| `ENABLE_SCHEDULER` | on outside prod | alert + maintenance + retention sweeps |
-| `ALERT_SWEEP_INTERVAL_MS` / `MAINTENANCE_SWEEP_INTERVAL_MS` / `RETENTION_SWEEP_INTERVAL_MS` | `30000` / `300000` / `3600000` | |
-| `READING_RETENTION_DAYS` | `90` | TTL on the readings collection; `0` disables |
-| `UPLOAD_DIR` / `MAX_UPLOAD_BYTES` | `uploads` / `10485760` | work-order attachments |
-| `INGEST_RATE_MAX` | `120` | device readings / minute / IP |
-| `DEFAULT_LABOR_RATE` | `50` | work-order cost roll-up |
-| `ALLOW_SEED` | on outside prod | guards `POST /api/seed` |
-| `BCRYPT_SALT_ROUNDS` | `12` | |
-| `LOGIN_RATE_MAX` / `LOGIN_RATE_WINDOW_MS` | `5` / `15m` | login throttle |
-| `EMAIL_ENABLED`, `SMTP_*`, `FROM_*` | Ethereal test inbox | outbound email (off automatically when `NODE_ENV=test`) |
-
-Client: `VITE_API_URL` — unset in dev (uses the Vite proxy); in prod set it to the
-API origin including `/api` (the socket origin is derived by stripping `/api`).
 
 ## Tests
 
