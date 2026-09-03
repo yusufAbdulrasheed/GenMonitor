@@ -34,10 +34,10 @@ const ApiKeys = () => {
   const delMut = useMutation({ mutationFn: (id) => api.delete(`/api-keys/${id}`), onSuccess: invalidate });
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
-          <KeyRound className="text-cyan-400" size={30} /> Device API Keys
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
+          <KeyRound className="text-cyan-400 shrink-0" size={30} /> Device API Keys
         </h1>
         <p className="text-slate-400 mb-6">
           Authenticate real controllers / IoT gateways posting to <code className="text-cyan-400">POST /api/ingest/readings</code>.
@@ -70,9 +70,9 @@ const ApiKeys = () => {
               generatorId: form.scope === 'generator' ? form.generatorId : undefined,
             });
           }}
-          className="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-6 flex flex-wrap items-end gap-3"
+          className="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3"
         >
-          <div className="flex-1 min-w-[180px]">
+          <div className="flex-1 sm:min-w-[180px]">
             <label className="block text-xs text-slate-400 mb-1">Name</label>
             <input
               required
@@ -87,7 +87,7 @@ const ApiKeys = () => {
             <select
               value={form.scope}
               onChange={(e) => setForm((f) => ({ ...f, scope: e.target.value }))}
-              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200"
+              className="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200"
             >
               <option value="fleet">Whole fleet</option>
               <option value="generator">Single generator</option>
@@ -100,7 +100,7 @@ const ApiKeys = () => {
                 required
                 value={form.generatorId}
                 onChange={(e) => setForm((f) => ({ ...f, generatorId: e.target.value }))}
-                className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200"
+                className="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200"
               >
                 <option value="">Select…</option>
                 {generators.map((g) => (
@@ -112,14 +112,15 @@ const ApiKeys = () => {
           <button
             type="submit"
             disabled={createMut.isPending}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+            className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
           >
             <Plus size={16} /> Create key
           </button>
         </form>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-          <table className="w-full text-left text-sm text-slate-300">
+         <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm text-slate-300">
             <thead className="bg-slate-950/50 text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="px-5 py-3">Name</th>
@@ -162,6 +163,7 @@ const ApiKeys = () => {
               )}
             </tbody>
           </table>
+         </div>
         </div>
       </div>
     </div>

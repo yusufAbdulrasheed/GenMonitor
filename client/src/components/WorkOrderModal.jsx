@@ -27,11 +27,11 @@ const WorkOrderModal = ({ isOpen, onClose, onSubmit, generators, assignees, isSa
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 relative">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X size={18} />
         </button>
-        <h2 className="text-xl font-bold text-slate-100 mb-6">New Work Order</h2>
+        <h2 className="text-xl font-bold text-slate-100 mb-6 pr-8">New Work Order</h2>
 
         <form
           onSubmit={(e) => {
@@ -67,7 +67,7 @@ const WorkOrderModal = ({ isOpen, onClose, onSubmit, generators, assignees, isSa
             <textarea rows={3} value={form.description} onChange={set('description')} className={input} />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1">Type</label>
               <select value={form.type} onChange={set('type')} className={input}>
@@ -86,7 +86,7 @@ const WorkOrderModal = ({ isOpen, onClose, onSubmit, generators, assignees, isSa
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1">Scheduled date</label>
               <input type="date" value={form.scheduledDate} onChange={set('scheduledDate')} className={input} />

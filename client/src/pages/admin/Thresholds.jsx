@@ -56,10 +56,10 @@ const Thresholds = () => {
   const configs = data?.configs || [];
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
-          <SlidersHorizontal className="text-cyan-400" size={30} /> Alert Thresholds
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
+          <SlidersHorizontal className="text-cyan-400 shrink-0" size={30} /> Alert Thresholds
         </h1>
         <p className="text-slate-400 mb-6">
           Resolution order at evaluation time: <span className="text-slate-300">generator → site → global → built-in defaults</span>.
@@ -68,19 +68,19 @@ const Thresholds = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 mb-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-3">Add / update override</h3>
           <div className="flex flex-wrap gap-3 mb-4">
-            <select value={scope} onChange={(e) => setScope(e.target.value)} className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
+            <select value={scope} onChange={(e) => setScope(e.target.value)} className="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
               <option value="global">Global</option>
               <option value="site">Site</option>
               <option value="generator">Generator</option>
             </select>
             {scope === 'site' && (
-              <select value={siteId} onChange={(e) => setSiteId(e.target.value)} className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
+              <select value={siteId} onChange={(e) => setSiteId(e.target.value)} className="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
                 <option value="">Select site…</option>
                 {sites.map((s) => <option key={s._id} value={s._id}>{s.name}</option>)}
               </select>
             )}
             {scope === 'generator' && (
-              <select value={generatorId} onChange={(e) => setGeneratorId(e.target.value)} className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
+              <select value={generatorId} onChange={(e) => setGeneratorId(e.target.value)} className="w-full sm:w-auto bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
                 <option value="">Select generator…</option>
                 {generators.map((g) => <option key={g._id} value={g._id}>{g.generatorId}</option>)}
               </select>
@@ -120,7 +120,8 @@ const Thresholds = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-          <table className="w-full text-left text-sm text-slate-300">
+         <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm text-slate-300">
             <thead className="bg-slate-950/50 text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="px-4 py-3">Scope</th>
@@ -151,6 +152,7 @@ const Thresholds = () => {
               ))}
             </tbody>
           </table>
+         </div>
         </div>
       </div>
     </div>

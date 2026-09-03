@@ -15,11 +15,12 @@ import {
   History,
   KeyRound,
   SlidersHorizontal,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 
-const Sidebar = () => {
+const Sidebar = ({ open = false, onClose = () => {} }) => {
   const { user, logout } = useAuth();
   const role = user?.role;
 
@@ -76,15 +77,37 @@ const Sidebar = () => {
     ) : null;
 
   return (
-    <div className="h-screen w-60 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0">
+    <>
+      {/* Mobile backdrop */}
+      <div
+        className={`fixed inset-0 z-30 bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-200 ${
+          open ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 w-60 bg-slate-900 border-r border-slate-800 flex flex-col
+          transform transition-transform duration-200 ease-out
+          lg:static lg:z-auto lg:translate-x-0 lg:shrink-0
+          ${open ? 'translate-x-0' : '-translate-x-full'}`}
+      >
       <div className="h-14 flex items-center gap-2.5 px-4 border-b border-slate-800">
         <Bolt className="text-cyan-400" />
         <span className="font-mono text-sm font-semibold tracking-wide text-slate-100">GENMONITOR</span>
+        <button
+          onClick={onClose}
+          className="ml-auto -mr-1.5 p-1.5 text-slate-400 hover:text-slate-100 lg:hidden"
+          aria-label="Close menu"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       <nav className="flex-1 py-3 overflow-y-auto">
         {visible(nav).map((item) => (
-          <NavLink key={item.name} to={item.path} end={item.path === '/'} className={linkClass}>
+          <NavLink key={item.name} to={item.path} end={item.path === '/'} onClick={onClose} className={linkClass}>
             {({ isActive }) => (
               <>
                 {isActive && <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-cyan-400" />}
@@ -102,7 +125,7 @@ const Sidebar = () => {
               Administration
             </p>
             {visible(admin).map((item) => (
-              <NavLink key={item.name} to={item.path} className={linkClass}>
+              <NavLink key={item.name} to={item.path} onClick={onClose} className={linkClass}>
                 {({ isActive }) => (
                   <>
                     {isActive && <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-cyan-400" />}
@@ -118,7 +141,7 @@ const Sidebar = () => {
 
       <div className="border-t border-slate-800 p-3">
         <div className="flex items-center gap-2.5">
-          <NavLink to="/profile" className="flex items-center gap-2.5 min-w-0 group flex-1">
+          <NavLink to="/profile" onClick={onClose} className="flex items-center gap-2.5 min-w-0 group flex-1">
             <div
               className="w-8 h-8 rounded-sm flex items-center justify-center text-[11px] font-semibold uppercase"
               style={{ background: '#e7e3d8', color: '#8f3714' }}
@@ -141,7 +164,8 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-    </div>
+      </aside>
+    </>
   );
 };
 

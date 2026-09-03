@@ -108,10 +108,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold font-mono tracking-tight text-white flex items-center gap-3">
-          <User className="text-cyan-400" />
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white flex items-center gap-3">
+          <User className="text-cyan-400 shrink-0" />
           Operator Profile
         </h1>
         <p className="text-slate-400 mt-2 text-sm max-w-2xl">
@@ -119,7 +119,7 @@ const Profile = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Info Card */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg h-fit relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">

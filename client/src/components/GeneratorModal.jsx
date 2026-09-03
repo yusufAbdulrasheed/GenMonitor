@@ -75,17 +75,17 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X className="w-5 h-5" />
         </button>
-        <h2 className="text-xl font-bold text-slate-100 mb-6">
+        <h2 className="text-xl font-bold text-slate-100 mb-6 pr-8">
           {initialData ? 'Edit Generator Asset' : 'Register Generator Asset'}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Generator ID</label>
               <input
@@ -115,7 +115,7 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Make</label>
               <input
@@ -142,7 +142,7 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Capacity (kVA)</label>
               <input

@@ -68,17 +68,17 @@ const MaintenancePlans = () => {
   });
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3">
-              <CalendarClock className="text-emerald-500" size={30} /> Maintenance Plans
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3">
+              <CalendarClock className="text-emerald-500 shrink-0" size={30} /> Maintenance Plans
             </h1>
             <p className="text-slate-400 mt-1">Recurring schedules that auto-generate preventive work orders.</p>
           </div>
           {canPlan && (
-            <div className="flex gap-2">
+            <div className="flex gap-2 shrink-0">
               <button
                 onClick={() => sweepMut.mutate()}
                 disabled={sweepMut.isPending}
@@ -97,7 +97,8 @@ const MaintenancePlans = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-          <table className="w-full text-left text-sm text-slate-300">
+         <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm text-slate-300">
             <thead className="bg-slate-950/50 text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="px-5 py-3">Plan</th>
@@ -151,6 +152,7 @@ const MaintenancePlans = () => {
               )}
             </tbody>
           </table>
+         </div>
         </div>
       </div>
 

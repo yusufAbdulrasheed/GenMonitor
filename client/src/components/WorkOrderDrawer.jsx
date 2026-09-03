@@ -66,7 +66,7 @@ const WorkOrderDrawer = ({ id, onClose, assignees, canManage }) => {
         {isLoading || !wo ? (
           <div className="p-8 text-emerald-500 animate-pulse">Loading…</div>
         ) : (
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="font-mono text-xs text-slate-500">{wo.code}</p>
@@ -191,7 +191,7 @@ const WorkOrderDrawer = ({ id, onClose, assignees, canManage }) => {
                       <Plus size={16} />
                     </button>
                   </form>
-                  <div className="flex items-center gap-2 text-sm">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
                     <span className="text-slate-400">Labor hrs</span>
                     <input
                       type="number" min="0" step="0.5" defaultValue={wo.laborHours ?? 0}

@@ -46,16 +46,16 @@ const Analytics = () => {
   }[metric];
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3">
-              <BarChart3 className="text-emerald-500" size={30} /> Analytics
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3">
+              <BarChart3 className="text-emerald-500 shrink-0" size={30} /> Analytics
             </h1>
             <p className="text-slate-400 mt-1">Fleet reliability, availability and consumption trends.</p>
           </div>
-          <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
+          <div className="flex gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1 self-start sm:self-auto">
             {RANGES.map((r) => (
               <button
                 key={r}
@@ -85,13 +85,13 @@ const Analytics = () => {
             <StatusDonut byStatus={summary?.generators?.byStatus || {}} />
           </div>
           <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
               <h3 className="text-sm font-semibold text-slate-300">Generator trend</h3>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <select
                   value={genId}
                   onChange={(e) => setGenId(e.target.value)}
-                  className="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-200"
+                  className="flex-1 sm:flex-none bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-200"
                 >
                   <option value="">Pick a generator…</option>
                   {generators.map((g) => (

@@ -58,11 +58,11 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="flex justify-between items-center mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold font-mono tracking-tight text-white flex items-center gap-3">
-            <Server className="text-cyan-400" />
+          <h1 className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-white flex items-center gap-3">
+            <Server className="text-cyan-400 shrink-0" />
             Active Personnel Logic
           </h1>
           <p className="text-slate-400 mt-2 text-sm max-w-2xl">
@@ -73,7 +73,7 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Provision Form */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg shadow-cyan-900/5 h-fit relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
@@ -170,7 +170,7 @@ const UserManagement = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-400">
+            <table className="w-full min-w-[560px] text-left text-sm text-slate-400">
               <thead className="text-xs uppercase bg-slate-950/50 text-slate-500 border-b border-slate-800">
                 <tr>
                   <th className="px-4 py-3 font-medium">Identifier</th>

@@ -58,19 +58,19 @@ const WorkOrders = () => {
   const rows = data?.workOrders || [];
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3">
-              <ClipboardList className="text-emerald-500" size={30} /> Work Orders
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3">
+              <ClipboardList className="text-emerald-500 shrink-0" size={30} /> Work Orders
             </h1>
             <p className="text-slate-400 mt-1">Assign, track, and close corrective &amp; preventive jobs.</p>
           </div>
           {canManage && (
             <button
               onClick={() => setCreateOpen(true)}
-              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium"
+              className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-medium shrink-0"
             >
               <Plus size={18} /> New Work Order
             </button>
@@ -81,7 +81,7 @@ const WorkOrders = () => {
           <select
             value={filters.status}
             onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
+            className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
           >
             <option value="">All statuses</option>
             {Object.keys(WO_STATUS_STYLES).map((s) => (
@@ -91,7 +91,7 @@ const WorkOrders = () => {
           <select
             value={filters.priority}
             onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
+            className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
           >
             <option value="">Any priority</option>
             {['low', 'medium', 'high', 'critical'].map((p) => (
@@ -109,7 +109,8 @@ const WorkOrders = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-          <table className="w-full text-left text-sm text-slate-300">
+         <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm text-slate-300">
             <thead className="bg-slate-950/50 text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="px-5 py-3">Code</th>
@@ -154,6 +155,7 @@ const WorkOrders = () => {
               )}
             </tbody>
           </table>
+         </div>
         </div>
       </div>
 

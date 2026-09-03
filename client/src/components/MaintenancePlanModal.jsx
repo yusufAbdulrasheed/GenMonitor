@@ -44,11 +44,11 @@ const MaintenancePlanModal = ({ isOpen, plan, generators, onClose, onSubmit, isS
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 relative">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X size={18} />
         </button>
-        <h2 className="text-xl font-bold text-slate-100 mb-6">{plan ? 'Edit Plan' : 'New Maintenance Plan'}</h2>
+        <h2 className="text-xl font-bold text-slate-100 mb-6 pr-8">{plan ? 'Edit Plan' : 'New Maintenance Plan'}</h2>
 
         <form
           onSubmit={(e) => {
@@ -82,7 +82,7 @@ const MaintenancePlanModal = ({ isOpen, plan, generators, onClose, onSubmit, isS
             <input required value={form.name} onChange={set('name')} className={input} placeholder="e.g. 250-hour service" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1">Interval type</label>
               <select value={form.intervalType} onChange={set('intervalType')} className={input}>
@@ -96,7 +96,7 @@ const MaintenancePlanModal = ({ isOpen, plan, generators, onClose, onSubmit, isS
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1">Priority</label>
               <select value={form.priority} onChange={set('priority')} className={input}>

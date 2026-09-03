@@ -36,10 +36,10 @@ const Reports = () => {
   };
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
-          <FileText className="text-emerald-500" size={32} /> Reports & Analytics
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
+          <FileText className="text-emerald-500 shrink-0" size={32} /> Reports & Analytics
         </h1>
         <p className="text-slate-400 mb-8">Generate and export system health, runtime, and fuel consumption analytics.</p>
 

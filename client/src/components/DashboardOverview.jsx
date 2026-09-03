@@ -56,15 +56,15 @@ const DashboardOverview = () => {
   ];
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
-      <div className="flex items-baseline justify-between mb-5">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto">
+      <div className="flex items-baseline justify-between gap-3 mb-5">
         <div>
           <h1 className="text-lg font-semibold text-slate-100">Fleet overview</h1>
           <p className="text-[13px] text-slate-400 mt-0.5">
             {total} unit{total === 1 ? "" : "s"} monitored
           </p>
         </div>
-        <span className="font-mono text-[11px] text-slate-500">
+        <span className="font-mono text-[11px] text-slate-500 shrink-0">
           {isFetching ? "refreshing…" : "auto-refresh 10s"}
         </span>
       </div>

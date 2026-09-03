@@ -60,19 +60,19 @@ const Alerts = () => {
   );
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex justify-between items-start sm:items-end gap-3 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3">
-              <Bell className="text-cyan-500" size={30} /> Alerts
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3">
+              <Bell className="text-cyan-500 shrink-0" size={30} /> Alerts
             </h1>
             <p className="text-slate-400 mt-1">Threshold-driven conditions with acknowledge / resolve workflow.</p>
           </div>
-          {isFetching && <RefreshCw className="animate-spin text-slate-500" size={18} />}
+          {isFetching && <RefreshCw className="animate-spin text-slate-500 shrink-0" size={18} />}
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6">
           {[
             { label: 'Critical', value: counts.critical, color: 'text-rose-400' },
             { label: 'Warning', value: counts.warning, color: 'text-amber-400' },
@@ -85,11 +85,11 @@ const Alerts = () => {
           ))}
         </div>
 
-        <div className="flex gap-3 mb-4">
+        <div className="flex flex-wrap gap-3 mb-4">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
+            className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
           >
             <option value="active">Active</option>
             <option value="open">Open</option>
@@ -100,7 +100,7 @@ const Alerts = () => {
           <select
             value={severityFilter}
             onChange={(e) => setSeverityFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
+            className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200"
           >
             <option value="">All severities</option>
             <option value="critical">Critical</option>

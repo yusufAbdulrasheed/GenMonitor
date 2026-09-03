@@ -57,11 +57,11 @@ const FleetMap = () => {
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
-      <div className="p-6 pb-3">
-        <h1 className="text-2xl font-bold text-slate-100">Fleet Map</h1>
+      <div className="p-4 sm:p-6 pb-3 sm:pb-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">Fleet Map</h1>
         <p className="text-slate-400 text-sm">Live site status — worst generator condition per site.</p>
       </div>
-      <div className="flex-1 mx-6 mb-6 rounded-xl overflow-hidden border border-slate-800">
+      <div className="flex-1 mx-4 sm:mx-6 mb-4 sm:mb-6 rounded-xl overflow-hidden border border-slate-800">
         {points.length === 0 ? (
           <div className="h-full flex items-center justify-center text-slate-500">
             No sites with coordinates yet.

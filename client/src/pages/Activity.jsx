@@ -25,19 +25,19 @@ const Activity = () => {
   const events = data?.events || [];
 
   return (
-    <div className="flex-1 p-8 overflow-auto bg-slate-950">
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
-          <History className="text-emerald-500" size={30} /> Activity Log
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 flex items-center gap-3 mb-2">
+          <History className="text-emerald-500 shrink-0" size={30} /> Activity Log
         </h1>
         <p className="text-slate-400 mb-6">Immutable audit trail of every change across the system.</p>
 
-        <div className="flex gap-3 mb-4">
-          <select value={entity} onChange={(e) => { setEntity(e.target.value); setPage(1); }} className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200">
+        <div className="flex flex-wrap gap-3 mb-4">
+          <select value={entity} onChange={(e) => { setEntity(e.target.value); setPage(1); }} className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200">
             <option value="">All entities</option>
             {ENTITIES.map((e) => <option key={e} value={e}>{e}</option>)}
           </select>
-          <select value={action} onChange={(e) => { setAction(e.target.value); setPage(1); }} className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200">
+          <select value={action} onChange={(e) => { setAction(e.target.value); setPage(1); }} className="w-full sm:w-auto bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200">
             <option value="">All actions</option>
             {['create', 'update', 'delete', 'login', 'logout', 'decommission', 'acknowledge', 'resolve', 'assign', 'status_change', 'sign_off', 'ingest'].map((a) => (
               <option key={a} value={a}>{titleCase(a)}</option>
@@ -46,7 +46,8 @@ const Activity = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-          <table className="w-full text-left text-sm text-slate-300">
+         <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left text-sm text-slate-300">
             <thead className="bg-slate-950/50 text-slate-400 border-b border-slate-800">
               <tr>
                 <th className="px-5 py-3">When</th>
@@ -87,6 +88,7 @@ const Activity = () => {
               )}
             </tbody>
           </table>
+         </div>
           {data?.pages > 1 && (
             <div className="flex items-center justify-between px-5 py-3 border-t border-slate-800 text-sm text-slate-400">
               <span>Page {data.page} of {data.pages}</span>
