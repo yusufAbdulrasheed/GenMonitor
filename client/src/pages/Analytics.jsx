@@ -76,7 +76,8 @@ const Analytics = () => {
           <Kpi label="MTTR" value={summary?.reliability?.mttrHours != null ? `${num(summary.reliability.mttrHours)}h` : '—'} />
           <Kpi label="Open alerts" value={summary?.alertsOpen?.total ?? '—'} sub={`${summary?.alertsOpen?.critical ?? 0} critical`} />
           <Kpi label="Work orders" value={summary?.workOrders?.open ?? '—'} sub={`${summary?.workOrders?.overdue ?? 0} overdue`} />
-          <Kpi label="Fuel burn" value={summary?.fuelBurnPctPerHour != null ? `${num(summary.fuelBurnPctPerHour)}%/h` : '—'} />
+          <Kpi label="Fuel burn" value={summary?.fuelBurnLitresPerHour != null ? `${num(summary.fuelBurnLitresPerHour)} L/h` : '—'} />
+
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

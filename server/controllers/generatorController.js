@@ -9,6 +9,7 @@ const sanitizeGeneratorPayload = (payload = {}) => {
   const cleanedPayload = {
     siteId: payload.siteId,
     siteCode: payload.siteCode?.toString().trim().toUpperCase(),
+    state: payload.state?.toString().trim(),
     generatorId: payload.generatorId?.toString().trim(),
     serialNumber: payload.serialNumber?.toString().trim(),
     make: payload.make?.toString().trim(),
@@ -55,10 +56,12 @@ const getGenerators = asyncHandler(async (req, res) => {
       { siteCode: { $regex: req.query.search, $options: 'i' } },
       { make: { $regex: req.query.search, $options: 'i' } },
       { model: { $regex: req.query.search, $options: 'i' } },
+      { state: { $regex: req.query.search, $options: 'i' } },
     ];
   }
   if (req.query.siteId) filter.siteId = req.query.siteId;
   if (req.query.siteCode) filter.siteCode = req.query.siteCode.toString().trim().toUpperCase();
+  if (req.query.state) filter.state = req.query.state;
   if (req.query.status) filter.status = req.query.status;
   if (req.query.isDecommissioned) filter.isDecommissioned = req.query.isDecommissioned === 'true';
 

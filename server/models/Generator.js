@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const NIGERIA_STATES = require("../utils/nigeriaStates");
 
 const generatorSchema = new mongoose.Schema(
   {
     siteId: { type: mongoose.Schema.Types.ObjectId, ref: "Site" },
     siteCode: { type: String, required: true, trim: true, uppercase: true },
+    state: { type: String, trim: true, enum: NIGERIA_STATES }, // Nigerian state the unit sits in
     generatorId: { type: String, required: true, unique: true },
     serialNumber: { type: String }, // keeping as optional secondary identifier
     make: { type: String, required: true },

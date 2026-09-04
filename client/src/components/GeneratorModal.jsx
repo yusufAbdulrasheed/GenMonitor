@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { NIGERIA_STATES } from '../lib/nigeriaStates';
 
 const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
     fuelTankSize: '',
     siteId: '',
     siteCode: '', // Added siteCode
+    state: '',
     installationDate: ''
   });
 
@@ -23,6 +25,7 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
         fuelTankSize: initialData.fuelTankSize || '',
         siteId: initialData.siteId?._id || initialData.siteId || '',
         siteCode: initialData.siteCode || '', // Added siteCode
+        state: initialData.state || '',
         installationDate: initialData.installationDate ? new Date(initialData.installationDate).toISOString().split('T')[0] : ''
       });
     } else {
@@ -34,6 +37,7 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
         fuelTankSize: '',
         siteId: '',
         siteCode: '', // Added siteCode
+        state: '',
         installationDate: ''
       });
     }
@@ -169,16 +173,33 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Installation Date</label>
-            <input
-              type="date"
-              name="installationDate"
-              required
-              value={formData.installationDate}
-              onChange={handleChange}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">State</label>
+              <select
+                name="state"
+                required
+                value={formData.state}
+                onChange={handleChange}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+              >
+                <option value="">Select a state</option>
+                {NIGERIA_STATES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Installation Date</label>
+              <input
+                type="date"
+                name="installationDate"
+                required
+                value={formData.installationDate}
+                onChange={handleChange}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">

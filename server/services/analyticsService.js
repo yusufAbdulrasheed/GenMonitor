@@ -22,9 +22,15 @@ const availabilityFromReadings = (readings) => {
   return round((up / readings.length) * 100, 1);
 };
 
-/** Litres-equivalent %/hour drawdown, averaged over decreasing segments. */
-const fuelBurnRate = (readings) => {
-  let drop = 0;
+/**
+ * Fuel draw-down in litres/hour, averaged over decreasing segments.
+ * Readings store fuelLevel as a percentage, so the tank capacity (litres) is
+ * needed to convert. Segments longer than 6h or with a rising level (refuel)
+ * are ignored.
+ */
+const fuelBurnLitresPerHour = (readings, tankLitres) => {
+  if (typeof tankLitres !== 'number' || tankLitres <= 0) return null;
+  let litres = 0;
   let hours = 0;
   for (let i = 1; i < readings.length; i += 1) {
     const a = readings[i - 1];
@@ -32,13 +38,13 @@ const fuelBurnRate = (readings) => {
     if (typeof a.fuelLevel !== 'number' || typeof b.fuelLevel !== 'number') continue;
     const dt = (new Date(b.timestamp) - new Date(a.timestamp)) / 3600e3;
     if (dt <= 0 || dt > 6) continue;
-    const delta = a.fuelLevel - b.fuelLevel;
-    if (delta > 0) {
-      drop += delta;
+    const deltaPct = a.fuelLevel - b.fuelLevel;
+    if (deltaPct > 0) {
+      litres += (deltaPct / 100) * tankLitres;
       hours += dt;
     }
   }
-  return hours > 0 ? round(drop / hours, 2) : null;
+  return hours > 0 ? round(litres / hours, 2) : null;
 };
 
 const fleetSummary = async (range = '7d') => {
@@ -70,6 +76,20 @@ const fleetSummary = async (range = '7d') => {
     ? round(availList.reduce((a, b) => a + b, 0) / availList.length, 1)
     : null;
 
+  // Fleet fuel burn: per-generator litres/hour, summed across the fleet.
+  const tankByGen = new Map(generators.map((g) => [String(g._id), g.fuelTankSize]));
+  let fleetBurn = 0;
+  let anyBurn = false;
+  for (const [genId, rs] of Object.entries(readingsByGen)) {
+    const ordered = rs.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    const lph = fuelBurnLitresPerHour(ordered, tankByGen.get(String(genId)));
+    if (lph !== null) {
+      fleetBurn += lph;
+      anyBurn = true;
+    }
+  }
+  const fleetFuelBurnLitresPerHour = anyBurn ? round(fleetBurn, 2) : null;
+
   const mttrHoursList = resolvedAlerts
     .map((a) => (new Date(a.resolvedAt) - new Date(a.firstSeenAt)) / 3600e3)
     .filter((h) => Number.isFinite(h) && h >= 0);
@@ -100,9 +120,7 @@ const fleetSummary = async (range = '7d') => {
       ).length,
       completedInRange: workOrders.filter((w) => w.completedAt && new Date(w.completedAt) >= since).length,
     },
-    fuelBurnPctPerHour: fuelBurnRate(
-      readings.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-    ),
+    fuelBurnLitresPerHour: fleetFuelBurnLitresPerHour,
   };
 };
 
@@ -119,14 +137,20 @@ const generatorHistory = async (generatorId, range = '24h', points = 500) => {
 
 const generatorAnalytics = async (generatorId, range = '7d') => {
   const since = new Date(Date.now() - rangeMs(range));
-  const [readings, alerts, workOrders] = await Promise.all([
+  const [generator, readings, alerts, workOrders] = await Promise.all([
+    Generator.findById(generatorId).select('fuelTankSize').lean(),
     Reading.find({ generatorId, timestamp: { $gte: since } }).sort({ timestamp: 1 }).lean(),
     Alert.find({ generatorId, firstSeenAt: { $gte: since } }).lean(),
     WorkOrder.find({ generatorId }).sort({ createdAt: -1 }).limit(10).lean(),
   ]);
 
+  const tankLitres = generator?.fuelTankSize;
   const first = readings[0];
   const last = readings[readings.length - 1];
+  const consumedPct =
+    first && last && typeof first.fuelLevel === 'number' && typeof last.fuelLevel === 'number'
+      ? Math.max(0, first.fuelLevel - last.fuelLevel)
+      : null;
   return {
     range,
     availabilityPct: availabilityFromReadings(readings),
@@ -134,11 +158,11 @@ const generatorAnalytics = async (generatorId, range = '7d') => {
       first && last && typeof first.runtimeHours === 'number' && typeof last.runtimeHours === 'number'
         ? round(last.runtimeHours - first.runtimeHours, 2)
         : null,
-    fuelConsumedPct:
-      first && last && typeof first.fuelLevel === 'number' && typeof last.fuelLevel === 'number'
-        ? round(Math.max(0, first.fuelLevel - last.fuelLevel), 1)
+    fuelConsumedLitres:
+      consumedPct !== null && typeof tankLitres === 'number' && tankLitres > 0
+        ? round((consumedPct / 100) * tankLitres, 1)
         : null,
-    fuelBurnPctPerHour: fuelBurnRate(readings),
+    fuelBurnLitresPerHour: fuelBurnLitresPerHour(readings, tankLitres),
     alerts: {
       total: alerts.length,
       byType: alerts.reduce((acc, a) => ({ ...acc, [a.type]: (acc[a.type] || 0) + 1 }), {}),

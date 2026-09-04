@@ -75,7 +75,7 @@ const runSeed = async ({ keepUserId } = {}) => {
   });
 
   const gen1 = await Generator.create({
-    siteId: site1._id, siteCode: site1.siteCode,
+    siteId: site1._id, siteCode: site1.siteCode, state: "Lagos",
     generatorId: "GEN-1001-A", serialNumber: "SN-1001",
     make: "Cummins", model: "C150D5", capacityKVA: 150, fuelTankSize: 500,
     installationDate: new Date("2020-01-15"),
@@ -83,7 +83,7 @@ const runSeed = async ({ keepUserId } = {}) => {
     runtimeHours: 1200, lastMaintenance: new Date(),
   });
   const gen2 = await Generator.create({
-    siteId: site1._id, siteCode: site1.siteCode,
+    siteId: site1._id, siteCode: site1.siteCode, state: "Lagos",
     generatorId: "GEN-1002-B", serialNumber: "SN-1002",
     make: "Cummins", model: "C150D5", capacityKVA: 150, fuelTankSize: 500,
     installationDate: new Date("2020-01-15"),
@@ -91,7 +91,7 @@ const runSeed = async ({ keepUserId } = {}) => {
     runtimeHours: 3500, lastMaintenance: new Date(Date.now() - 120 * 24 * 3600e3),
   });
   const gen3 = await Generator.create({
-    siteId: site2._id, siteCode: site2.siteCode,
+    siteId: site2._id, siteCode: site2.siteCode, state: "Rivers",
     generatorId: "GEN-2001-C", serialNumber: "SN-2001",
     make: "Caterpillar", model: "C15", capacityKVA: 500, fuelTankSize: 1000,
     installationDate: new Date("2018-05-20"),

@@ -4,6 +4,7 @@ import { Server, Plus, Search, Filter, Edit, PowerOff, Power } from 'lucide-reac
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import GeneratorModal from '../../components/GeneratorModal';
+import { NIGERIA_STATES } from '../../lib/nigeriaStates';
 import toast from 'react-hot-toast';
 
 const Generators = () => {
@@ -13,6 +14,7 @@ const Generators = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [siteFilter, setSiteFilter] = useState('');
+  const [stateFilter, setStateFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [decommissionedFilter, setDecommissionedFilter] = useState('false');
   
@@ -28,13 +30,14 @@ const Generators = () => {
   });
 
   const { data: generatorData, isLoading: loadingGens } = useQuery({
-    queryKey: ['generatorsList', page, search, siteFilter, statusFilter, decommissionedFilter],
+    queryKey: ['generatorsList', page, search, siteFilter, stateFilter, statusFilter, decommissionedFilter],
     queryFn: async () => {
       const params = new URLSearchParams({
         page,
         limit: 10,
         search,
         siteId: siteFilter,
+        state: stateFilter,
         status: statusFilter,
       });
       if (decommissionedFilter) {
@@ -134,7 +137,7 @@ const Generators = () => {
               className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:flex gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:flex gap-3 md:gap-4">
             <select
               value={siteFilter}
               onChange={(e) => { setSiteFilter(e.target.value); setPage(1); }}
@@ -143,6 +146,16 @@ const Generators = () => {
               <option value="">All Sites</option>
               {sites?.map(site => (
                 <option key={site._id} value={site._id}>{site.name}</option>
+              ))}
+            </select>
+            <select
+              value={stateFilter}
+              onChange={(e) => { setStateFilter(e.target.value); setPage(1); }}
+              className="bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
+            >
+              <option value="">All States</option>
+              {NIGERIA_STATES.map((s) => (
+                <option key={s} value={s}>{s}</option>
               ))}
             </select>
             <select
@@ -171,13 +184,14 @@ const Generators = () => {
         {/* Table */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[820px] text-left text-sm text-slate-300">
+            <table className="w-full min-w-[920px] text-left text-sm text-slate-300">
               <thead className="bg-slate-950/50 text-slate-400 font-medium border-b border-slate-800">
                 <tr>
                   <th className="px-6 py-4">Generator ID</th>
                   <th className="px-6 py-4">Make & Model</th>
                   <th className="px-6 py-4">Site Code</th>
                   <th className="px-6 py-4">Site</th>
+                  <th className="px-6 py-4">State</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4 text-right">Runtime (hrs)</th>
                   <th className="px-6 py-4 text-right">Actions</th>
@@ -186,13 +200,13 @@ const Generators = () => {
               <tbody className="divide-y divide-slate-800/50">
                 {loadingGens ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-8 text-center text-emerald-500 animate-pulse">
+                    <td colSpan="8" className="px-6 py-8 text-center text-emerald-500 animate-pulse">
                       Loading assets...
                     </td>
                   </tr>
                 ) : generatorData?.generators?.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-8 text-center text-slate-500">
+                    <td colSpan="8" className="px-6 py-8 text-center text-slate-500">
                       No generators found matching the criteria.
                     </td>
                   </tr>
@@ -213,6 +227,7 @@ const Generators = () => {
                       </td>
                       <td className="px-6 py-4">{gen.siteCode || 'N/A'}</td>
                       <td className="px-6 py-4">{gen.siteId?.name || 'Unassigned'}</td>
+                      <td className="px-6 py-4">{gen.state || '—'}</td>
                       <td className="px-6 py-4">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(gen.status)}`}>
                           {gen.isDecommissioned ? 'Decommissioned' : gen.status}
