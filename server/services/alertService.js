@@ -27,10 +27,27 @@ const computeDesired = (generator, t, hasOpen) => {
 
   const fuel = generator.fuelLevel;
   if (typeof fuel === 'number' && !generator.isDecommissioned) {
+    // Report fuel in litres (fuelLevel is stored as a % of tank capacity).
+    const tank = generator.fuelTankSize;
+    const litres = (pct) => (typeof tank === 'number' ? Math.round((pct / 100) * tank) : null);
+    const fuelText = litres(fuel) != null ? `${litres(fuel)} L / ${tank} L` : `${fuel.toFixed(1)}%`;
+
     if (fuel <= t.criticalFuelPct) {
-      desired.push({ type: 'LowFuel', severity: 'critical', value: fuel, threshold: t.criticalFuelPct, message: `Fuel critically low (${fuel.toFixed(1)}%)` });
+      desired.push({
+        type: 'LowFuel',
+        severity: 'critical',
+        value: litres(fuel) ?? fuel,
+        threshold: litres(t.criticalFuelPct) ?? t.criticalFuelPct,
+        message: `Fuel critically low (${fuelText})`,
+      });
     } else if (fuel <= m(t.lowFuelPct, MARGIN.fuel, +1)) {
-      desired.push({ type: 'LowFuel', severity: 'warning', value: fuel, threshold: t.lowFuelPct, message: `Fuel low (${fuel.toFixed(1)}%)` });
+      desired.push({
+        type: 'LowFuel',
+        severity: 'warning',
+        value: litres(fuel) ?? fuel,
+        threshold: litres(t.lowFuelPct) ?? t.lowFuelPct,
+        message: `Fuel low (${fuelText})`,
+      });
     }
   }
 

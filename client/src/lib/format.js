@@ -49,3 +49,9 @@ export const fmtDateTime = (date) =>
   date ? new Date(date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—';
 
 export const num = (v, dp = 1) => (typeof v === 'number' ? v.toFixed(dp) : '—');
+
+// Fuel is stored as a percentage of tank capacity; convert to litres for display.
+export const litresFromPct = (pct, tankSize) =>
+  typeof pct === 'number' && typeof tankSize === 'number'
+    ? Math.round((pct / 100) * tankSize)
+    : null;

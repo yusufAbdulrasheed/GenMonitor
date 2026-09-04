@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MapContainer, TileLayer, CircleMarker, Tooltip, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import api from '../utils/api';
+import { litresFromPct } from '../lib/format';
 
 const STATUS_COLOR = {
   Fault: '#a2382f',
@@ -89,11 +90,15 @@ const FleetMap = () => {
                   <div className="text-sm">
                     <strong>{p.name}</strong> <span className="text-slate-500">({p.siteCode})</span>
                     <ul className="mt-1">
-                      {p.gens.map((g) => (
-                        <li key={g._id}>
-                          {g.generatorId}: {g.status} · {g.fuelLevel != null ? `${g.fuelLevel.toFixed(0)}% fuel` : 'n/a'}
-                        </li>
-                      ))}
+                      {p.gens.map((g) => {
+                        const litres = litresFromPct(g.fuelLevel, g.fuelTankSize);
+                        return (
+                          <li key={g._id}>
+                            {g.generatorId}: {g.status} ·{' '}
+                            {litres != null ? `${litres.toLocaleString()} L fuel` : 'n/a'}
+                          </li>
+                        );
+                      })}
                       {p.gens.length === 0 && <li>No generators</li>}
                     </ul>
                   </div>

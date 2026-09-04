@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { NIGERIA_STATES } from '../lib/nigeriaStates';
 
+const EMPTY = {
+  generatorId: '',
+  make: '',
+  model: '',
+  capacityKVA: '',
+  fuelTankSize: '',
+  site: '', // free text — an existing site name/code, or a new one to create
+  state: '',
+  installationDate: '',
+};
+
 const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
-  const [formData, setFormData] = useState({
-    generatorId: '',
-    make: '',
-    model: '',
-    capacityKVA: '',
-    fuelTankSize: '',
-    siteId: '',
-    siteCode: '', // Added siteCode
-    state: '',
-    installationDate: ''
-  });
+  const [formData, setFormData] = useState(EMPTY);
 
   useEffect(() => {
     if (initialData) {
@@ -23,49 +24,16 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
         model: initialData.model || '',
         capacityKVA: initialData.capacityKVA || '',
         fuelTankSize: initialData.fuelTankSize || '',
-        siteId: initialData.siteId?._id || initialData.siteId || '',
-        siteCode: initialData.siteCode || '', // Added siteCode
+        site: initialData.siteId?.name || initialData.siteCode || '',
         state: initialData.state || '',
-        installationDate: initialData.installationDate ? new Date(initialData.installationDate).toISOString().split('T')[0] : ''
+        installationDate: initialData.installationDate
+          ? new Date(initialData.installationDate).toISOString().split('T')[0]
+          : '',
       });
     } else {
-      setFormData({
-        generatorId: '',
-        make: '',
-        model: '',
-        capacityKVA: '',
-        fuelTankSize: '',
-        siteId: '',
-        siteCode: '', // Added siteCode
-        state: '',
-        installationDate: ''
-      });
+      setFormData(EMPTY);
     }
   }, [initialData, isOpen]);
-
-  useEffect(() => {
-    if (formData.siteId && sites?.length) {
-      const selectedSite = sites.find(site => site._id === formData.siteId);
-      if (selectedSite && selectedSite.siteCode !== formData.siteCode) {
-        setFormData(prev => ({ ...prev, siteCode: selectedSite.siteCode }));
-      }
-    } else if (!formData.siteId && formData.siteCode) {
-      // Clear siteCode if no site is selected
-      setFormData(prev => ({ ...prev, siteCode: '' }));
-    }
-  }, [formData.siteId, formData.siteCode, sites]);
-
-  // When editing, initialData may carry only a siteCode (no populated siteId);
-  // derive the siteId from the loaded sites list so the <select> shows it.
-  useEffect(() => {
-    if (initialData?.siteCode && !formData.siteId && sites?.length) {
-      const siteByCode = sites.find(site => site.siteCode === initialData.siteCode);
-      if (siteByCode) {
-        setFormData(prev => ({ ...prev, siteId: siteByCode._id, siteCode: siteByCode.siteCode }));
-      }
-    }
-  }, [initialData, sites, formData.siteId]);
-
 
   if (!isOpen) return null;
 
@@ -104,18 +72,23 @@ const GeneratorModal = ({ isOpen, onClose, onSubmit, initialData, sites }) => {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Assigned Site</label>
-              <select
-                name="siteId"
+              <input
+                type="text"
+                name="site"
                 required
-                value={formData.siteId}
+                list="site-options"
+                value={formData.site}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-              >
-                <option value="">Select a site</option>
-                {sites?.map(site => (
-                  <option key={site._id} value={site._id}>{site.name}</option>
+                placeholder="Type or pick a site"
+              />
+              <datalist id="site-options">
+                {sites?.map((site) => (
+                  <option key={site._id} value={site.name} />
                 ))}
-              </select>
+              </datalist>
+              <p className="mt-1 text-xs text-slate-500">Pick an existing site or type a new one to create it.</p>
             </div>
           </div>
 

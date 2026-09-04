@@ -1,5 +1,6 @@
 import React from "react";
 import { Fuel, Battery, Thermometer, Clock } from "lucide-react";
+import { litresFromPct } from "../lib/format";
 
 const STATUS = {
   Running: { label: "running", color: "#3c7853" },
@@ -20,6 +21,7 @@ const Metric = ({ icon: Icon, label, value }) => (
 
 const GeneratorCard = ({ generator: g }) => {
   const s = STATUS[g.status] || { label: g.status, color: "#8c8578" };
+  const fuelLitres = litresFromPct(g.fuelLevel, g.fuelTankSize);
 
   return (
     <div className="flex bg-slate-900 border border-slate-800 rounded overflow-hidden">
@@ -41,7 +43,11 @@ const GeneratorCard = ({ generator: g }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-          <Metric icon={Fuel} label="Fuel" value={`${g.fuelLevel?.toFixed(0) ?? "–"}%`} />
+          <Metric
+            icon={Fuel}
+            label="Fuel"
+            value={fuelLitres != null ? `${fuelLitres.toLocaleString()} L` : "–"}
+          />
           <Metric icon={Battery} label="Battery" value={`${g.batteryVoltage?.toFixed(1) ?? "–"} V`} />
           <Metric icon={Thermometer} label="Temp" value={`${g.temperature?.toFixed(0) ?? "–"} °C`} />
           <Metric icon={Clock} label="Runtime" value={`${g.runtimeHours?.toFixed(0) ?? 0} h`} />

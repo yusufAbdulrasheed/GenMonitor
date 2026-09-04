@@ -38,12 +38,25 @@ const Analytics = () => {
     enabled: !!genId,
   });
 
+  const selectedGen = generators.find((g) => g._id === genId);
+  const tankSize = selectedGen?.fuelTankSize;
+
   const metricMeta = {
-    fuelLevel: { color: '#bf4a1f', unit: '%', domain: [0, 100] },
+    fuelLevel: { color: '#bf4a1f', unit: ' L', domain: [0, tankSize || 'auto'] },
     temperature: { color: '#96691a', unit: '°C' },
     batteryVoltage: { color: '#386690', unit: 'V' },
     runtimeHours: { color: '#3c7853', unit: 'h' },
   }[metric];
+
+  // Readings store fuelLevel as a % of capacity — convert the series to litres.
+  const chartData =
+    metric === 'fuelLevel' && tankSize
+      ? history.map((r) => ({
+          ...r,
+          fuelLevel:
+            typeof r.fuelLevel === 'number' ? Math.round((r.fuelLevel / 100) * tankSize) : r.fuelLevel,
+        }))
+      : history;
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-slate-950">
@@ -104,7 +117,7 @@ const Analytics = () => {
                   onChange={(e) => setMetric(e.target.value)}
                   className="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-sm text-slate-200"
                 >
-                  <option value="fuelLevel">Fuel %</option>
+                  <option value="fuelLevel">Fuel (L)</option>
                   <option value="temperature">Temperature</option>
                   <option value="batteryVoltage">Battery V</option>
                   <option value="runtimeHours">Runtime h</option>
@@ -113,7 +126,7 @@ const Analytics = () => {
             </div>
             {genId ? (
               history.length > 0 ? (
-                <TrendChart data={history} dataKey={metric} {...metricMeta} />
+                <TrendChart data={chartData} dataKey={metric} {...metricMeta} />
               ) : (
                 <p className="text-slate-500 text-sm py-16 text-center">No readings in this window.</p>
               )

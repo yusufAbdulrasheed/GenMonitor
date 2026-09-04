@@ -53,6 +53,7 @@ const Generators = () => {
     mutationFn: (newGen) => api.post('/generators', newGen),
     onSuccess: () => {
       queryClient.invalidateQueries(['generatorsList']);
+      queryClient.invalidateQueries(['sitesList']); // a new site may have been created
       toast.success('Generator created successfully');
       setIsModalOpen(false);
     },
@@ -63,6 +64,7 @@ const Generators = () => {
     mutationFn: ({ id, data }) => api.put(`/generators/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries(['generatorsList']);
+      queryClient.invalidateQueries(['sitesList']);
       toast.success('Generator updated successfully');
       setIsModalOpen(false);
       setEditingGen(null);

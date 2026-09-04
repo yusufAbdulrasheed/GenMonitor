@@ -1,9 +1,41 @@
 const asyncHandler = require('../utils/asyncHandler');
 const Generator = require('../models/Generator');
+const Site = require('../models/Site');
 const { parseNumber } = require('../utils/telemetry');
 const { recordReading } = require('../services/telemetryService');
 const { generatorHistory } = require('../services/analyticsService');
 const { diffObjects } = require('../services/auditService');
+
+/**
+ * Resolve a free-text site (name or code) entered on the generator form to a
+ * Site document, creating one when it doesn't exist yet. Returns the
+ * { siteId, siteCode } to merge into the generator payload.
+ */
+const resolveSite = async (siteInput, fallbackLocation) => {
+  const value = siteInput?.toString().trim();
+  if (!value) return {};
+
+  const lower = value.toLowerCase();
+  const upper = value.toUpperCase();
+  const sites = await Site.find({}).select('name siteCode');
+  const match = sites.find(
+    (s) => s.name.toLowerCase() === lower || s.siteCode === upper
+  );
+  if (match) return { siteId: match._id, siteCode: match.siteCode };
+
+  // Create a new site. Derive a unique, uppercase, alnum-dash code from the name.
+  const base =
+    value.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toUpperCase().slice(0, 20) || 'SITE';
+  let code = base;
+  for (let n = 2; await Site.exists({ siteCode: code }); n += 1) code = `${base}-${n}`;
+
+  const site = await Site.create({
+    name: value,
+    siteCode: code,
+    location: fallbackLocation?.toString().trim() || value,
+  });
+  return { siteId: site._id, siteCode: site.siteCode };
+};
 
 const sanitizeGeneratorPayload = (payload = {}) => {
   const cleanedPayload = {
@@ -85,6 +117,9 @@ const getGenerators = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const createGenerator = asyncHandler(async (req, res) => {
   const payload = sanitizeGeneratorPayload(req.body);
+  if (req.body.site) {
+    Object.assign(payload, await resolveSite(req.body.site, payload.state));
+  }
   if (!payload.serialNumber && payload.generatorId) {
     payload.serialNumber = payload.generatorId;
   }
@@ -103,6 +138,9 @@ const createGenerator = asyncHandler(async (req, res) => {
 // @access  Private/Admin,Engineer
 const updateGenerator = asyncHandler(async (req, res) => {
   const payload = sanitizeGeneratorPayload(req.body);
+  if (req.body.site) {
+    Object.assign(payload, await resolveSite(req.body.site, payload.state));
+  }
   const existing = await Generator.findById(req.params.id);
   if (!existing) {
     res.status(404);
